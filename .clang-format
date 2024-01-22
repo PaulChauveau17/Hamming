@@ -1,0 +1,19 @@
+Language: Cpp
+# https://clang-format-configurator.site/
+BasedOnStyle: LLVM
+BreakBeforeBraces: GNU
+IndentWidth: 2
+TabWidth: 8
+ColumnLimit: 79
+PenaltyBreakBeforeFirstCallParameter: 100
+SpaceBeforeParens: Always
+PointerAlignment: Right
+AlwaysBreakAfterReturnType: All
+IndentCaseLabels: false
+AlignConsecutiveMacros: true
+BinPackArguments: true
+BinPackParameters: true
+
+# Usage:
+# clang-format --version
+# clang-format -i ./src/*.c
