@@ -1,5 +1,5 @@
-# optimization level: 3
-CFLAGS = -std=c11 -Wall -Wextra -g -O3
+# optimization level: 1
+CFLAGS = -std=c11 -Wall -Wextra -g -O1
 CPPFLAGS = -I../include -DDEBUG
 LDFLAGS =
 EXE_ARGS = -v
