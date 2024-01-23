@@ -94,7 +94,8 @@ find_an_error (binary_data_t data)
 {
   int err_pos = 0;
   bool sum = calc_sum (data);
-
+  fprintf(stdout, "sum = %d\n", sum);
+  fprintf(stdout, "%d\n", data.bits % 2);
   for (int pos = 0; pos < DATA_LEN; pos++)
     {
       if ((data.bits >> pos) % 2)
@@ -103,7 +104,7 @@ find_an_error (binary_data_t data)
   if (err_pos == 0 && sum == data.bits % 2)
     {
       if (verbose)
-        fputs ("hamming_code: there is no error, probably\n", stdout);
+        fputs ("hamming_code: there is probably no error\n", stdout);
       return NO_ERROR_DETECTED;
     }
   if (sum != data.bits % 2)
@@ -123,7 +124,7 @@ void
 correct_an_error (binary_data_t *data)
 {
   int err_pos = find_an_error (*data);
-  if (err_pos == NO_ERROR_DETECTED || err_pos == UNREACHEBLE_ERRORS_DETECTED)
+  if (err_pos == NO_ERROR_DETECTED || err_pos == UNREACHABLE_ERRORS_DETECTED)
     return;
   binary_data_t mask;
   mask.bits = (1 << err_pos);
