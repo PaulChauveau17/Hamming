@@ -13,6 +13,43 @@
 bool verbose = false;
 
 void
+show_data_as_bytes (binary_data_t data)
+{
+  binary_data_t mask;
+  mask.bits = 1;
+  for (int i = 1; i <= DATA_LEN; i++)
+    {
+      if (mask.bits & data.bits)
+        fputs ("1", stdout);
+      else
+        fputs ("0", stdout);
+      if (i % 8 == 0)
+        fputs (" ", stdout);
+      mask.bits = mask.bits << 1;
+    }
+  fputs ("\n", stdout);
+}
+
+void
+show_data_as_matrix (binary_data_t data)
+{
+  binary_data_t mask;
+  mask.bits = 1;
+  for (int lin = 1; lin <= MATRIX_SIZE; lin++)
+    {
+      for (int col = 1; col <= MATRIX_SIZE; col++)
+        {
+          if (mask.bits & data.bits)
+            fputs ("1 ", stdout);
+          else
+            fputs ("0 ", stdout);
+          mask.bits = mask.bits << 1;
+        }
+      fputs ("\n", stdout);
+    }
+}
+
+void
 clear_controls (binary_data_t *data)
 {
   binary_data_t mask;
@@ -62,9 +99,9 @@ bool
 calc_sum (binary_data_t data)
 {
   bool sum = 0;
-  for (int pos = 0; pos <= 15; pos++)
+  for (int pos = 1; pos <= 15; pos++)
     sum ^= (data.bits >> pos) % 2;
-  return sum;
+  return sum; // sum of the bits (except first one)
 }
 
 void
@@ -76,6 +113,7 @@ set_controls (binary_data_t *data)
   set_ctrl3 (data);
   set_ctrl4 (data);
   data->bits += calc_sum (*data);
+
 }
 
 void
@@ -155,43 +193,6 @@ free_data (binary_data_t *data)
   free (data);
 }
 
-void
-show_data_as_bytes (binary_data_t data)
-{
-  binary_data_t mask;
-  mask.bits = 1;
-  for (int i = 1; i <= DATA_LEN; i++)
-    {
-      if (mask.bits & data.bits)
-        fputs ("1", stdout);
-      else
-        fputs ("0", stdout);
-      if (i % 8 == 0)
-        fputs (" ", stdout);
-      mask.bits = mask.bits << 1;
-    }
-  fputs ("\n", stdout);
-}
-
-void
-show_data_as_matrix (binary_data_t data)
-{
-  binary_data_t mask;
-  mask.bits = 1;
-  for (int lin = 1; lin <= MATRIX_SIZE; lin++)
-    {
-      for (int col = 1; col <= MATRIX_SIZE; col++)
-        {
-          if (mask.bits & data.bits)
-            fputs ("1 ", stdout);
-          else
-            fputs ("0 ", stdout);
-          mask.bits = mask.bits << 1;
-        }
-      fputs ("\n", stdout);
-    }
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -236,7 +237,8 @@ main (int argc, char *argv[])
         }
     }
 
-  srand (time (NULL));
+  srand (time (NULL)); // 1 sequence/sec
+  //TODO pass a seed param, ex: ./hamming_code -s $RANDOM
 
   binary_data_t *data = get_random_data ();
   set_controls (data);
